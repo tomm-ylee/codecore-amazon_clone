@@ -16,6 +16,7 @@
     <%= time_ago_in_words(@product.updated_at) %>
     ago
   </small>
+  <small>by <strong><%= "#{@product.user.first_name} #{@product.user.last_name}" %></strong></small>
 </div>
 
 <div>
@@ -27,3 +28,36 @@
     }
    %>
 </div>
+
+<%= form_for [@product, @review] do |f| %>
+  <% if @review.errors.present? %>
+  <p>
+    <%= @review.errors.full_messages.join(', ') %>
+  </p>
+  <% end %>
+
+
+  <h2>Add Review </h2>
+  <div>
+    <%= f.label :rating %> <br>
+    <%= f.number_field(:rating, in: 1..5, step: 1, placeholder: '') %>
+  </div>
+  <div>
+    <%= f.label :body %> <br>
+    <%= f.text_field :body %>
+  </div>
+  <%= f.submit "Send Review" %>
+<% end %>
+
+  <h2>Reviews</h2>
+<% @reviews.each do |review| %>
+  <div class="review-list-item">
+    <p>Rating: <%= review.rating %>/5
+      <small><%= link_to "Delete", review_path(review), method: :delete %></small
+    </p>
+    <p><%= review.body %></p>
+    <small>Review made <%= time_ago_in_words(review.created_at) %> ago</small>
+    <small> by <%= "#{review.user.first_name} #{review.user.last_name}" %> </small>
+  </div>
+
+<% end %>

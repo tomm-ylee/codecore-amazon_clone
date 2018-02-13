@@ -1,0 +1,16 @@
+<h1>Sign In</h1>
+
+
+<%= form_for :session, url: session_path do |f| %>
+  <div>
+    <%= f.label :email %>
+    <br>
+    <%= f.email_field :email %>
+  </div>
+  <div>
+    <%= f.label :password %>
+    <br>
+    <%= f.password_field :password %>
+  </div>
+  <%= f.submit 'Submit' %>
+<% end %>

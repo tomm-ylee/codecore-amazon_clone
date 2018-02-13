@@ -1,4 +1,7 @@
 class Product < ApplicationRecord
+  belongs_to :user
+  has_many :reviews
+
 
   after_initialize :default_zero_hit
   before_validation :set_default_price
@@ -14,7 +17,7 @@ class Product < ApplicationRecord
   validates :sale_price, numericality: {less_than_or_equal_to: :price}
 
   before_save :capitalize_title
-  before_destroy :notify_delete
+  # before_destroy :notify_delete
 
   def self.search(search_word)
     Product.where('title ILIKE ? OR description ILIKE ?', "%#{search_word}%", "%#{search_word}%")

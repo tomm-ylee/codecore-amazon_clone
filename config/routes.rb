@@ -20,31 +20,40 @@ Rails.application.routes.draw do
 
   post('/contact', {to: 'contact#submit'})
 
-  # Products Controller HTTP VERBS Routes
+  # # Products Controller HTTP VERBS Routes
+  #
+  # # Products#new
+  # get('products/new', to: 'products#new', as: :new_product)
+  #
+  # # Products#create
+  # post('products', to: 'products#create', as: :products)
+  #
+  # # Products#show
+  # get('products/:id', to: 'products#show', as: :product)
+  #
+  # # Product#index
+  # get('products', to: 'products#index')
+  #
+  # # Product#destroy
+  # delete('products/:id', to: 'products#destroy')
+  #
+  # # Product#edit
+  # get('products/:id/edit', to: 'products#edit', as: :edit_product)
+  #
+  # # Product#update
+  # patch('products/:id', to: 'products#update')
 
-  # Products#new
-  get('products/new', to: 'products#new', as: :new_product)
-
-  # Products#create
-  post('products', to: 'products#create', as: :products)
-
-  # Products#show
-  get('products/:id', to: 'products#show', as: :product)
-
-  # Product#index
-  get('products', to: 'products#index')
-
-  # Product#destroy
-  delete('products/:id', to: 'products#destroy')
-
-  # Product#edit
-  get('products/:id/edit', to: 'products#edit', as: :edit_product)
-
-  # Product#update
-  patch('products/:id', to: 'products#update')
-
-  namespace :admin do
-    resources :questions
+  resources :products do
+    resources :reviews, only: [:create, :destroy], shallow: true
   end
+
+  resources :users, only: [:new, :create]
+
+  resource :session, only: [:new, :create, :destroy]
+
+
+  # namespace :admin do
+  #   resources :questions
+  # end
 
 end
