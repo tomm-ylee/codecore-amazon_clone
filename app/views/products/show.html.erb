@@ -39,31 +39,28 @@
   <% end %>
 
 
-  <h2>Add Review </h2>
-  <div>
-    <%= f.label :rating %> <br>
-    <%= f.number_field(:rating, in: 1..5, step: 1, placeholder: '') %>
-  </div>
-  <div>
-    <%= f.label :body %> <br>
-    <%= f.text_field :body %>
-  </div>
-  <%= f.submit "Send Review" %>
+<h2>Add Review </h2>
+<div>
+  <%= f.label :rating %> <br>
+  <%= f.number_field(:rating, in: 1..5, step: 1, placeholder: '') %>
+</div>
+<div>
+  <%= f.label :body %> <br>
+  <%= f.text_field :body %>
+</div>
+<%= f.submit "Send Review" %>
 <% end %>
 
-  <h2>Reviews</h2>
+<h2>Reviews</h2>
 <% @reviews.each do |review| %>
   <% if review.hidden %>
     <% if can?(:manage, @product) %>
       <div class="review-list-item hidden">
         <p>Rating: <%= review.rating %>/5
-          <% if can?(:manage, @product) %>
           <small><%= link_to "Toggle Hide", hide_review_path(review), method: :patch %></small>
-          <% end %>
           <% if can?(:destroy, review) %>
-          <small><%= link_to "Delete", review_path(review), method: :delete %></small>
+            <small><%= link_to "Delete", review_path(review), method: :delete %></small>
           <% end %>
-
         </p>
         <p><%= review.body %></p>
         <small>Review made <%= time_ago_in_words(review.created_at) %> ago</small>
@@ -74,12 +71,11 @@
     <div class="review-list-item">
       <p>Rating: <%= review.rating %>/5
         <% if can?(:manage, @product) %>
-        <small><%= link_to "Toggle Hide", hide_review_path(review), method: :post %></small>
+        <small><%= link_to "Toggle Hide", hide_review_path(review), method: :patch %></small>
         <% end %>
         <% if can?(:destroy, review) %>
         <small><%= link_to "Delete", review_path(review), method: :delete %></small>
         <% end %>
-
       </p>
       <p><%= review.body %></p>
       <small>Review made <%= time_ago_in_words(review.created_at) %> ago</small>
