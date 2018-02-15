@@ -20,6 +20,7 @@
 </div>
 
 <div>
+  <% if can?(:manage, @product) %>
   <%= link_to 'Update', edit_product_path(@product)%>
   <%= link_to 'Delete', product_path(@product),
     method: :delete,
@@ -27,6 +28,7 @@
       confirm: 'Are you sure?'
     }
    %>
+   <% end %>
 </div>
 
 <%= form_for [@product, @review] do |f| %>
@@ -51,13 +53,38 @@
 
   <h2>Reviews</h2>
 <% @reviews.each do |review| %>
-  <div class="review-list-item">
-    <p>Rating: <%= review.rating %>/5
-      <small><%= link_to "Delete", review_path(review), method: :delete %></small
-    </p>
-    <p><%= review.body %></p>
-    <small>Review made <%= time_ago_in_words(review.created_at) %> ago</small>
-    <small> by <%= "#{review.user.first_name} #{review.user.last_name}" %> </small>
-  </div>
+  <% if review.hidden %>
+    <% if can?(:manage, @product) %>
+      <div class="review-list-item hidden">
+        <p>Rating: <%= review.rating %>/5
+          <% if can?(:manage, @product) %>
+          <small><%= link_to "Toggle Hide", hide_review_path(review), method: :patch %></small>
+          <% end %>
+          <% if can?(:destroy, review) %>
+          <small><%= link_to "Delete", review_path(review), method: :delete %></small>
+          <% end %>
+
+        </p>
+        <p><%= review.body %></p>
+        <small>Review made <%= time_ago_in_words(review.created_at) %> ago</small>
+        <small> by <%= "#{review.user.first_name} #{review.user.last_name}" %> </small>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="review-list-item">
+      <p>Rating: <%= review.rating %>/5
+        <% if can?(:manage, @product) %>
+        <small><%= link_to "Toggle Hide", hide_review_path(review), method: :post %></small>
+        <% end %>
+        <% if can?(:destroy, review) %>
+        <small><%= link_to "Delete", review_path(review), method: :delete %></small>
+        <% end %>
+
+      </p>
+      <p><%= review.body %></p>
+      <small>Review made <%= time_ago_in_words(review.created_at) %> ago</small>
+      <small> by <%= "#{review.user.first_name} #{review.user.last_name}" %> </small>
+    </div>
+  <% end %>
 
 <% end %>

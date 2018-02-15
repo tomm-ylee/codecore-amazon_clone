@@ -9,7 +9,7 @@
   </head>
 
   <body>
-    <nav>
+    <nav class="container-fluid">
       <%= link_to 'Amazon', root_path %>
       <%= link_to 'About', about_path %>
       <%= link_to 'Add Product', new_product_path %>
@@ -19,6 +19,9 @@
       <% if user_signed_in? %>
       <%= link_to 'Sign Out', session_path, method: :delete %>
         <span> Hiya, <%= current_user.first_name %> </span>
+        <% if current_user.is_admin? %>
+          <%= link_to 'Admin Panel', admin_panel_index_path %>
+        <% end %>
       <% else %>
         <%= link_to 'Sign In', new_session_path %>
         <%= link_to 'Sign Up', new_user_path %>
@@ -32,7 +35,8 @@
     </div>
     <% end %>
 
-
-    <%= yield %>
+    <div class="container-fluid">
+      <%= yield %>
+    </div>
   </body>
 </html>

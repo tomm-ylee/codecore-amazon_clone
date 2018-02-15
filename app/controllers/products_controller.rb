@@ -1,5 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
+  before_action :find_product, except: [:new, :create, :index]
+  before_action :authorize_user!, only:  [:edit, :update, :destroy]
 
   def new
     @product = Product.new
@@ -17,7 +19,6 @@ class ProductsController < ApplicationController
   end
 
   def show
-    @product = Product.find(params[:id])
     @review = Review.new
     @reviews = @product.reviews.order(created_at: :desc)
   end
@@ -27,22 +28,24 @@ class ProductsController < ApplicationController
   end
 
   def destroy
-    @product = Product.find(params[:id])
     @product.destroy
 
     redirect_to products_path
   end
 
   def edit
-    @product = Product.find(params[:id])
   end
 
   def update
-    @product = Product.find params[:id]
+    if @product.sale_price > @product.price
+      temp_sale = @product.sale_price
+      @product.sale_price = @product.price
+    end
 
     if @product.update product_params
       redirect_to product_path(@product)
     else
+      @product.sale_price = temp_sale
       render :edit
     end
   end
@@ -52,5 +55,17 @@ class ProductsController < ApplicationController
   def product_params
     params.require(:product).permit(:title, :description, :price)
   end
+
+  def find_product
+    @product = Product.find params[:id]
+  end
+
+  def authorize_user!
+    unless can?(:manage, @product)
+      flash[:alert] = 'Access denied'
+      redirect_to product_path(@product)
+    end
+  end
+
 
 end

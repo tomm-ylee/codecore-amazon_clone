@@ -1,33 +1,9 @@
-# Product.destroy_all
-#
-# 20.times do
-#   Product.create(
-#     title: Faker::Simpsons.location,
-#     description: Faker::Seinfeld.quote,
-#     price: rand(1..100)
-#   )
-# end
-#
-# puts "Seeded #{Product.count}"
-
-# User.destroy_all
-#
-# 10.times do
-#   User.create(
-#     first_name: Faker::FamilyGuy.character,
-#     last_name: Faker::FamilyGuy.character,
-#     email: Faker::Internet.email
-#   )
-# end
-#
-# puts "Seeded #{User.count}"
-
 Review.destroy_all
 Product.destroy_all
 User.destroy_all
 
 PASSWORD = 'mypassword'
-User.create(first_name: 'Okay', last_name: 'User', email: 'johndoe@email.com', password: PASSWORD)
+User.create(first_name: 'Tommy', last_name: 'Lee', email: 'tommylee@email.com', password: PASSWORD, is_admin: true)
 
 10.times do
 
@@ -55,11 +31,14 @@ users = User.all
 
   if p.valid?
     3.times do
+      hide_it = rand(6) > 5 ? true : false
+
       Review.create(
         rating: rand(1..5),
         body: Faker::RickAndMorty.quote,
         product: p,
-        user: users.sample
+        user: users.sample,
+        hidden: hide_it
       )
     end
   end

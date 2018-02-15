@@ -47,13 +47,14 @@ Rails.application.routes.draw do
     resources :reviews, only: [:create, :destroy], shallow: true
   end
 
+  patch('review/hide/:id', to: 'reviews#hide', as: :hide_review)
+
   resources :users, only: [:new, :create]
 
   resource :session, only: [:new, :create, :destroy]
 
-
-  # namespace :admin do
-  #   resources :questions
-  # end
+  namespace :admin do
+    resources :panel, only: [:index]
+  end
 
 end

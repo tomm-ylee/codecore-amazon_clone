@@ -30,6 +30,11 @@ gem 'bcrypt', '~> 3.1.7'
 
 gem 'faker', '~>1.8.7'
 gem 'colorize'
+gem 'cancancan', '~>2.0'
+
+# Bootstrap
+gem 'jquery-rails'
+gem 'bootstrap', '~> 4.0.0'
 
 
 # Use Capistrano for deployment
