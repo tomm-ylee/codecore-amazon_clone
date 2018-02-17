@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180214224727) do
+ActiveRecord::Schema.define(version: 20180215225839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "news_articles", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.datetime "published_at"
+    t.bigint "user_id"
+    t.integer "view_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_news_articles_on_user_id"
+  end
 
   create_table "products", force: :cascade do |t|
     t.string "title"
@@ -49,6 +60,7 @@ ActiveRecord::Schema.define(version: 20180214224727) do
     t.boolean "is_admin", default: false
   end
 
+  add_foreign_key "news_articles", "users"
   add_foreign_key "products", "users"
   add_foreign_key "reviews", "products"
   add_foreign_key "reviews", "users"

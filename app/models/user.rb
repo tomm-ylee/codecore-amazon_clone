@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :products, dependent: :destroy
   has_many :reviews, dependent: :nullify
+  has_many :news_articles, dependent: :nullify
 
   has_secure_password
 

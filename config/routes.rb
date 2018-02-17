@@ -57,4 +57,6 @@ Rails.application.routes.draw do
     resources :panel, only: [:index]
   end
 
+  resources :news_articles
+
 end
