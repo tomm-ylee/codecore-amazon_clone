@@ -1,7 +1,8 @@
 class Product < ApplicationRecord
   belongs_to :user
   has_many :reviews, dependent: :destroy
-
+  has_many :favourites, dependent: :destroy
+  has_many :users, through: :favourites
 
   after_initialize :default_zero_hit
   before_validation :set_default_price

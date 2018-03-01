@@ -4,7 +4,7 @@
     <title>AmazonClone</title>
     <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
   </head>
 
@@ -19,6 +19,7 @@
       <% if user_signed_in? %>
       <%= link_to 'Sign Out', session_path, method: :delete %>
         <span> Hiya, <%= current_user.first_name %> </span>
+        <%= link_to 'Favourites', user_favourites_path(current_user) %>
         <% if current_user.is_admin? %>
           <%= link_to 'Admin Panel', admin_panel_index_path %>
         <% end %>

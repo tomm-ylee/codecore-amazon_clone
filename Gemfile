@@ -32,9 +32,13 @@ gem 'faker', '~>1.8.7'
 gem 'colorize'
 gem 'cancancan', '~>2.0'
 
+gem 'rails-erd'
+gem 'font-awesome-rails'
+
 # Bootstrap
 gem 'jquery-rails'
 gem 'bootstrap', '~> 4.0.0'
+
 
 
 # Use Capistrano for deployment

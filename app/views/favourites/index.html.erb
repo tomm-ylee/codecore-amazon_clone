@@ -1,0 +1,18 @@
+<h1><%= @user.first_name %>'s Favourites Page</h1>
+
+<table>
+
+  <tbody>
+    <tr>
+      <th>Product id</th>
+      <th>| Product Title</th>
+    </tr>
+
+    <% @products.each do |product| %>
+      <tr>
+        <td><%= product.id %></td>
+        <td>| <%= link_to "#{product.title}", product_path(product) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -20,7 +20,7 @@
 </div>
 
 <div>
-  <% if can?(:manage, @product) %>
+  <% if can?(:crud, @product) %>
   <%= link_to 'Update', edit_product_path(@product)%>
   <%= link_to 'Delete', product_path(@product),
     method: :delete,
@@ -30,6 +30,12 @@
    %>
    <% end %>
 </div>
+<% if @favourite.present? %>
+  <%= link_to fa_icon('heart 2x'), favourite_path(@favourite), method: :delete %>
+<% else %>
+  <%= link_to fa_icon('heart-o 2x'), product_favourites_path(@product), method: :post %>
+<% end %>
+
 
 <%= form_for [@product, @review] do |f| %>
   <% if @review.errors.present? %>
@@ -51,11 +57,19 @@
 <%= f.submit "Send Review" %>
 <% end %>
 
-<h2>Reviews</h2>
+<h2>Reviews</h2><hr>
 <% @reviews.each do |review| %>
+
   <% if review.hidden %>
-    <% if can?(:manage, @product) %>
+    <% if can?(:crud, @product) %>
+      <div class="review-list-item semi-hidden">
+    <% else %>
       <div class="review-list-item hidden">
+    <% end %>
+  <% else %>
+      <div class="review-list-item">
+  <% end %>
+
         <p>Rating: <%= review.rating %>/5
           <small><%= link_to "Toggle Hide", hide_review_path(review), method: :patch %></small>
           <% if can?(:destroy, review) %>
@@ -65,22 +79,19 @@
         <p><%= review.body %></p>
         <small>Review made <%= time_ago_in_words(review.created_at) %> ago</small>
         <small> by <%= "#{review.user.first_name} #{review.user.last_name}" %> </small>
+        <br>
+
+        <div class="like-spot">
+          <% like = review.likes.find_by(user: current_user) %>
+          <% if like.present? %>
+            <%= link_to fa_icon('thumbs-up 2x'), like_path(like), method: :delete %>
+          <% else %>
+            <%= link_to fa_icon('thumbs-o-up 2x'), review_likes_path(review), method: :post %>
+          <% end %>
+          <%= pluralize(review.likes.count, 'like') %>
+        </div>
+
+        <hr>
       </div>
-    <% end %>
-  <% else %>
-    <div class="review-list-item">
-      <p>Rating: <%= review.rating %>/5
-        <% if can?(:manage, @product) %>
-        <small><%= link_to "Toggle Hide", hide_review_path(review), method: :patch %></small>
-        <% end %>
-        <% if can?(:destroy, review) %>
-        <small><%= link_to "Delete", review_path(review), method: :delete %></small>
-        <% end %>
-      </p>
-      <p><%= review.body %></p>
-      <small>Review made <%= time_ago_in_words(review.created_at) %> ago</small>
-      <small> by <%= "#{review.user.first_name} #{review.user.last_name}" %> </small>
-    </div>
-  <% end %>
 
 <% end %>

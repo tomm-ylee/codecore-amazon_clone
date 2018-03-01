@@ -1,5 +1,5 @@
 class NewsArticle < ApplicationRecord
-  belongs_to :user, optional: true
+  belongs_to :user
 
   before_validation :titleize_title
 

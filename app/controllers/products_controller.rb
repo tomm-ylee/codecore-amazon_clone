@@ -21,6 +21,8 @@ class ProductsController < ApplicationController
   def show
     @review = Review.new
     @reviews = @product.reviews.order(created_at: :desc)
+
+    @favourite = @product.favourites.find_by(user_id: current_user) if current_user.present?
   end
 
   def index
@@ -61,7 +63,7 @@ class ProductsController < ApplicationController
   end
 
   def authorize_user!
-    unless can?(:manage, @product)
+    unless can?(:crud, @product)
       flash[:alert] = 'Access denied'
       redirect_to product_path(@product)
     end

@@ -43,13 +43,20 @@ Rails.application.routes.draw do
   # # Product#update
   # patch('products/:id', to: 'products#update')
 
-  resources :products do
-    resources :reviews, only: [:create, :destroy], shallow: true
+  resources :products, shallow: true do
+    resources :reviews, only: [:create, :destroy]
+    resources :favourites, only: [:create, :destroy]
+  end
+
+  resources :reviews, only: [] do
+    resources :likes, only: [:create, :destroy], shallow: true
   end
 
   patch('review/hide/:id', to: 'reviews#hide', as: :hide_review)
 
-  resources :users, only: [:new, :create]
+  resources :users, only: [:new, :create] do
+    resources :favourites, only: [:index], shallow: true
+  end
 
   resource :session, only: [:new, :create, :destroy]
 

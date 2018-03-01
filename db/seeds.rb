@@ -2,8 +2,8 @@ Review.destroy_all
 Product.destroy_all
 User.destroy_all
 
-PASSWORD = 'mypassword'
-User.create(first_name: 'Tommy', last_name: 'Lee', email: 'tommylee@email.com', password: PASSWORD, is_admin: true)
+PASSWORD = 'tester'
+User.create(first_name: 'Admin', last_name: 'User', email: 'admin@email.com', password: PASSWORD, is_admin: true)
 
 10.times do
 

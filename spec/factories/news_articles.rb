@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :news_article do
-    title Faker::Book.title
+    sequence(:title) { |n| Faker::Book.title + " #{n}" }
     description Faker::Company.catch_phrase
+    association(:user) { FactoryBot.create(:user) }
   end
 end

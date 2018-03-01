@@ -1,17 +1,21 @@
 
 .flash-message {
-  width: 50%;
+  padding: 10px;
   border: 5px;
   background-color: skyblue;
   border-radius: 3px;
 }
 
 .hidden {
-  color: grey;
+  display: none;
 }
 
-.hidden a {
-  color: teal;
+.semi-hidden {
+  color: grey;
+
+  a {
+    color: teal;
+  }
 }
 
 thead *{
