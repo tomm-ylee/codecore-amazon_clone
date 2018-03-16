@@ -12,6 +12,7 @@ class ReviewsController < ApplicationController
     @review.user = current_user
 
     if @review.save
+      ReviewAddedMailer.notify_product_owner(@review).deliver_now
       redirect_to product_path(@product)
     else
       @reviews = @product.reviews.order(created_at: :desc)

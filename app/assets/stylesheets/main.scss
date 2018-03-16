@@ -29,3 +29,16 @@ div .container-fluid {
 .welcome-img {
   display: inline;
 }
+
+textarea, input[type=text] {
+  margin-bottom: 10px;
+}
+
+textarea {
+  width: 400px;
+  resize: none;
+}
+
+input, textarea, select {
+  display: block;
+}

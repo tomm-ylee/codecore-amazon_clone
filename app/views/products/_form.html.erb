@@ -1,0 +1,15 @@
+<%= simple_form_for @product do |f| %>
+  <%= f.input :title %>
+  <%= f.input :description %>
+  <%= f.input :price %>
+  <%= f.input :image %>
+  <%= f.association :tags, input_html: { class: 'chosen-select' } %>
+  <%= f.simple_fields_for :faqs do |op| %>
+    <%= render 'faq_fields', f: op %>
+  <% end %>
+  <div class="links">
+    <%= link_to_add_association 'add faq', f, :faqs %>
+  </div>
+
+  <%= f.submit %>
+<% end %>

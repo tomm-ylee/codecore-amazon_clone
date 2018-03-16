@@ -1,0 +1,22 @@
+<h2> <%= @user.full_name %>  </h2>
+<p> Last logged in at: </p>
+
+<div style='width: 800px;'>
+  <div id="map" style='width: 800px; height: 400px;'></div>
+</div>
+
+<script>
+  handler = Gmaps.build('Google');
+  handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+  markers = handler.addMarkers([
+    {
+      "lat": <%= @location.latitude %>,
+      "lng": <%= @location.longitude %>,
+      "infowindow": "<%= @user.full_name %>"
+    }
+  ]);
+  handler.bounds.extendWith(markers);
+  handler.fitMapToBounds();
+  handler.getMap().setZoom(17);
+  });
+</script>

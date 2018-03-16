@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  resources :faqs, only: [:create]
+
+
   # Home Controller HTTP VERB Routes
   get('/', {to: 'home#index', as: :root})
   get('/faq', {to: 'home#faq'})
@@ -48,13 +51,14 @@ Rails.application.routes.draw do
     resources :favourites, only: [:create, :destroy]
   end
 
-  resources :reviews, only: [] do
-    resources :likes, only: [:create, :destroy], shallow: true
+  resources :reviews, only: [], shallow: true do
+    resources :likes, only: [:create, :destroy]
+    resources :votes, only: [:create, :update, :destroy]
   end
 
   patch('review/hide/:id', to: 'reviews#hide', as: :hide_review)
 
-  resources :users, only: [:new, :create] do
+  resources :users, only: [:new, :create, :show] do
     resources :favourites, only: [:index], shallow: true
   end
 
@@ -65,5 +69,20 @@ Rails.application.routes.draw do
   end
 
   resources :news_articles
+
+  resources :tags, only: [:index, :show]
+
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+      resources :products, only: [:index, :show, :create]
+      resources :users, only: [:create]
+      resources :tokens, only: [:create, :destroy]
+    end
+
+    match "*unmatched_route", to: "application#not_found", via: :all
+  end
+
+  match "delayed_job", to: DelayedJobWeb, anchor: false, via: [:get, :post]
+
 
 end

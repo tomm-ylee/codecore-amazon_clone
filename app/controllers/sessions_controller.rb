@@ -4,7 +4,9 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by(email: session_params[:email])
-
+    # location = Location.new(user: user, ip_address: request.remote_ip)
+    location = Location.new(user: user, ip_address: '50.64.108.1')
+    location.save
     if user&.authenticate(session_params[:password])
       session[:user_id] = user.id
       flash[:notice] = 'You gone signed in'

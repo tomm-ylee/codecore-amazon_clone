@@ -1,6 +1,12 @@
+Tagging.destroy_all
+Favourite.destroy_all
+Like.destroy_all
+
+Tag.destroy_all
 Review.destroy_all
 Product.destroy_all
 User.destroy_all
+
 
 PASSWORD = 'tester'
 User.create(first_name: 'Admin', last_name: 'User', email: 'admin@email.com', password: PASSWORD, is_admin: true)
@@ -21,6 +27,17 @@ User.create(first_name: 'Admin', last_name: 'User', email: 'admin@email.com', pa
 end
 
 users = User.all
+
+30.times.each do
+  Tag.create(
+    name: Faker::Book.genre.downcase
+  )
+end
+
+tags = Tag.all
+
+puts "Created #{tags.count} tags"
+
 40.times do
   p = Product.create(
     title: Faker::Food.dish,
@@ -38,10 +55,14 @@ users = User.all
         body: Faker::RickAndMorty.quote,
         product: p,
         user: users.sample,
+        users: users.shuffle.slice(0..rand(users.count)),
         hidden: hide_it
       )
     end
   end
+  p.tags = tags.shuffle.slice(0..rand(5))
+  p.users = users.shuffle.slice(0..rand(users.count))
+
 end
 
 puts "Created #{User.count} users"

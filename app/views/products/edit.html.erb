@@ -1,25 +1,3 @@
 <h1>Edit Product Page</h1>
 
-<%= form_for @product do |f| %>
-  <% if @product.errors.present? %>
-    <p><%= @product.errors.full_messages.join(', ') %> </p>
-  <% end %>
-
-  <div>
-    <%= f.label :title %>
-    <br/>
-    <%= f.text_field :title %>
-  </div>
-  <div>
-    <%= f.label :description %>
-    <br/>
-    <%= f.text_area :description %>
-  </div>
-  <div>
-    <%= f.label :price %>
-    <br/>
-    <%= f.text_field :price %>
-  </div>
-
-  <%= f.submit %>
-<% end %>
+<%= render 'form' %>

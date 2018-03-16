@@ -1,9 +1,20 @@
 class Product < ApplicationRecord
   belongs_to :user
   has_many :reviews, dependent: :destroy
+
+  # MtM Association with Users: Favourites
   has_many :favourites, dependent: :destroy
   has_many :users, through: :favourites
 
+  # MtM Association with Tags: Taggings
+  has_many :taggings, dependent: :destroy
+  has_many :tags, through: :taggings
+
+  # FAQs
+  has_many :faqs, dependent: :destroy
+  accepts_nested_attributes_for :faqs, reject_if: :all_blank, allow_destroy: true
+
+  # Validations
   after_initialize :default_zero_hit
   before_validation :set_default_price
   before_validation :set_default_sale_price
@@ -20,6 +31,8 @@ class Product < ApplicationRecord
   before_save :capitalize_title
   # before_destroy :notify_delete
 
+
+  # Helpful Methods
   def self.search(search_word)
     Product.where('title ILIKE ? OR description ILIKE ?', "%#{search_word}%", "%#{search_word}%")
   end
@@ -40,6 +53,11 @@ class Product < ApplicationRecord
       .offset( ( current_page - 1 ) * per_page_count )
   end
 
+  include FriendlyId
+  friendly_id :title, use: [:slugged, :history, :finders]
+
+  mount_uploader :image, ImageUploader
+
   private
 
   def set_default_price
@@ -52,6 +70,7 @@ class Product < ApplicationRecord
 
   def set_default_sale_price
     self.sale_price ||= self.price
+    self.sale_price = self.price if self.sale_price > self.price
   end
 
   def default_zero_hit

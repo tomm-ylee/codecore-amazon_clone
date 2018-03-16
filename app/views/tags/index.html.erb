@@ -1,0 +1,6 @@
+<h1>Products by Tags</h1>
+<ul class="tag-index">
+<% @tags.each do |tag| %>
+  <li> <%= link_to tag.name, tag_path(tag) %> (<%= tag.products.count %>)</li>
+<% end %>
+</ul>

@@ -1,0 +1,10 @@
+<p>Hi, <%= @product.user.first_name %> </p>
+<p> Someone gave a review for: [<%= @product.title %>] </p>
+<p> <%= link_to "Link to product page", product_url(@product.id)  %>  </p>
+
+<p> Review: <%= @review.rating %>/5 </p>
+<p> "<%= @review.body %>" </p>
+<p> By user: <%= @review.user.first_name %> <%= @review.user.last_name %> </p>
+
+
+<p>From <%= link_to "Not-Real Amazon", root_url  %></p>

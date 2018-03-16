@@ -1,8 +1,14 @@
 <h1><%= @product.title %></h1>
 
-
+<div class="tag-containers">
+  <% @product.tags.order(:name).each do |tag| %>
+    <%= link_to tag.name, tag_path(tag), class: "badge badge-pill badge-primary" %>
+  <% end %>
+</div>
 <p>Product Description: <br/><%= @product.description %></p>
 <p>Product Price: <br/><%= number_to_currency(@product.price) %></p>
+
+<%= image_tag @product.image.url(:medium) if @product.image.present? %>
 
 <div>
   <small>
@@ -36,24 +42,19 @@
   <%= link_to fa_icon('heart-o 2x'), product_favourites_path(@product), method: :post %>
 <% end %>
 
-
-<%= form_for [@product, @review] do |f| %>
-  <% if @review.errors.present? %>
-  <p>
-    <%= @review.errors.full_messages.join(', ') %>
-  </p>
+<div class="faqs-container">
+  <h3>Frequently Asked Questions</h3>
+  <% @product.faqs.each do |faq| %>
+    <p><strong> Question: <%= faq.question %> </strong></p>
+    <p> Answer: <%= faq.answer %> </p>
   <% end %>
+</div>
 
+<%= simple_form_for [@product, @review] do |f| %>
 
 <h2>Add Review </h2>
-<div>
-  <%= f.label :rating %> <br>
-  <%= f.number_field(:rating, in: 1..5, step: 1, placeholder: '') %>
-</div>
-<div>
-  <%= f.label :body %> <br>
-  <%= f.text_field :body %>
-</div>
+<%= f.input(:rating, in: 1..5, step: 1, placeholder: '') %>
+<%= f.input :body %>
 <%= f.submit "Send Review" %>
 <% end %>
 
@@ -84,11 +85,29 @@
         <div class="like-spot">
           <% like = review.likes.find_by(user: current_user) %>
           <% if like.present? %>
-            <%= link_to fa_icon('thumbs-up 2x'), like_path(like), method: :delete %>
+            <%= link_to fa_icon('check-circle'), like_path(like), method: :delete %>
           <% else %>
-            <%= link_to fa_icon('thumbs-o-up 2x'), review_likes_path(review), method: :post %>
+            <%= link_to fa_icon('circle-o'), review_likes_path(review), method: :post %>
           <% end %>
-          <%= pluralize(review.likes.count, 'like') %>
+          <span><%= pluralize(review.likes.count, 'user') %> liked this</span>
+        </div>
+
+        <div class="vote-spot">
+          <% vote = review.votes.find_by(user:current_user) %>
+          <% if vote.nil? %>
+            <%= link_to fa_icon('arrow-circle-o-up 2x'), review_votes_path(review, {choice: true}), method: :post %>
+            <%= review.vote_total %>
+            <%= link_to fa_icon('arrow-circle-o-down 2x'), review_votes_path(review, {choice: false}), method: :post %>
+          <% elsif vote.choice? %>
+            <%= link_to fa_icon('arrow-circle-up 2x'), vote_path(vote), method: :delete %>
+            <%= review.vote_total %>
+            <%= link_to fa_icon('arrow-circle-o-down 2x'), vote_path(vote, {choice: false}), method: :patch %>
+          <% else %>
+            <%= link_to fa_icon('arrow-circle-o-up 2x'), vote_path(vote, {choice: true}), method: :patch %>
+            <%= review.vote_total %>
+            <%= link_to fa_icon('arrow-circle-down 2x'), vote_path(vote), method: :delete %>
+          <% end %>
+
         </div>
 
         <hr>

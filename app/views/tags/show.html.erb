@@ -1,0 +1,6 @@
+<h1>[<%= @tag.name %>] Tag Page</h1>
+<ul class="tag-show">
+<% @products.each do |product| %>
+  <li> <%= link_to product.title, product_path(product) %> </li>
+<% end %>
+</ul>

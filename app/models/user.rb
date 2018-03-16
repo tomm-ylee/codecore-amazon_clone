@@ -1,13 +1,27 @@
 class User < ApplicationRecord
+  # Many Association with Products
   has_many :products, dependent: :destroy
+
+  # Many Association with Reviews
   has_many :reviews, dependent: :nullify
+
+  # Many Association with News Articles
   has_many :news_articles, dependent: :nullify
 
+  # Many Association with Locations
+  has_many :locations, dependent: :destroy
+  
+  # MtM Association with Products: Favourites
   has_many :favourites, dependent: :destroy
   has_many :favourite_products, through: :favourites, source: :product
 
+  # MtM Association with Reviews: Likes
   has_many :likes, dependent: :destroy
   has_many :liked_review, through: :likes, source: :review
+
+  # MtM Association with Reviews: Votes
+  has_many :votes, dependent: :destroy
+  has_many :voted_review, through: :votes, source: :review
 
   has_secure_password
 

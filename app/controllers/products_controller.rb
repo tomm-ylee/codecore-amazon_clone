@@ -5,6 +5,7 @@ class ProductsController < ApplicationController
 
   def new
     @product = Product.new
+    @product.faqs.build
   end
 
   def create
@@ -12,6 +13,7 @@ class ProductsController < ApplicationController
     @product.user = current_user
 
     if @product.save
+      CreateProductMailer.notify_product_owner(@product).deliver_now
       redirect_to product_path(@product)
     else
       render :new
@@ -20,7 +22,7 @@ class ProductsController < ApplicationController
 
   def show
     @review = Review.new
-    @reviews = @product.reviews.order(created_at: :desc)
+    @reviews = @product.reviews.sort_by { |review| -1 * review.vote_total }
 
     @favourite = @product.favourites.find_by(user_id: current_user) if current_user.present?
   end
@@ -55,7 +57,8 @@ class ProductsController < ApplicationController
   private
 
   def product_params
-    params.require(:product).permit(:title, :description, :price)
+    params.require(:product).permit(:title, :description, :price, :image, {faqs_attributes: [:id, :question, :answer], tag_ids: []}
+    )
   end
 
   def find_product
